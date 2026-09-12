@@ -1,0 +1,40 @@
+tests/test_estimate_usage.py
+  s_f6590fd3bb1677::t_c34b025f49c416 1-38
+agents/openai.yaml
+  s_f6590fd3bb1677::t_39d0c256a0423e 1-7
+references/subagent-mode.md
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-25
+SKILL.md
+  s_f6590fd3bb1677::t_39d0c256a0423e 1-2,4-118
+  s_f6590fd3bb1677::t_3529474accea76 3
+references/usage-estimation.md
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-56
+.gitignore
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-18
+README.md
+  s_f6590fd3bb1677::t_c34b025f49c416 1-193
+LICENSE
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-21
+scripts/estimate_usage.py
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-126
+references/task-mode.md
+  s_f6590fd3bb1677::t_be382fecf4e3ec 1-27
+README.zh-CN.md
+  s_f6590fd3bb1677::t_c34b025f49c416 1-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b446ca2dcb8cc66041ce33efdce9a74f9057ed85",
+  "prompts": {},
+  "sessions": {
+    "s_f6590fd3bb1677": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a09531-7975-7192-930a-9135f05b903a",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "jerry_yang <192410459+jerryyeungisjingyang@users.noreply.github.com>"
+    }
+  }
+}
