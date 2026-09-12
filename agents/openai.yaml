@@ -1,0 +1,7 @@
+interface:
+  display_name: "去月球! · Go To Luna!"
+  short_description: "当前模型规划，GPT-5.6 Luna 并行执行并由主模型复核"
+  default_prompt: "使用 $go-to-luna medium sub n=auto 处理上一条任务，并在完成后估算主模型工作量与额度节省。"
+
+policy:
+  allow_implicit_invocation: false
