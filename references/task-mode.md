@@ -7,7 +7,7 @@ Use this mode only when the user explicitly selected `task`, `thread`, or `æ–°å¯
 Resolve the current project before creation. Keep every prompt self-contained and minimal.
 
 - Set the new task model to `gpt-5.6-luna`.
-- Set its reasoning effort to the parsed `low`, `medium`, or `high` value.
+- Set its reasoning effort to the parsed `low`, `medium`, `high`, or `xhigh` value.
 - Prefix titles with `Luna i/n` followed by a short assignment name.
 - Use the same saved project for repository work and a projectless task only when no repository context is needed.
 - For a Git repository, use isolated worktrees when workers need repository access. Include the current working-tree state only when the task depends on uncommitted changes.

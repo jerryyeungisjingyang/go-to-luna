@@ -1,4 +1,6 @@
-# Go To Luna! · 去月球!
+# go-to-luna
+
+> **去月球! · Go To Luna!**
 
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](https://learn.chatgpt.com/docs/build-skills)
 [![Worker model](https://img.shields.io/badge/workers-GPT--5.6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
@@ -6,7 +8,7 @@
 
 English · [简体中文](README.zh-CN.md)
 
-Use your current Codex model to plan and review. Send the execution-heavy work to one or more GPT-5.6 Luna workers at `low`, `medium`, or `high` reasoning effort.
+Use your current Codex model to plan and review. Send the execution-heavy work to one or more GPT-5.6 Luna workers at `low`, `medium`, `high`, or `xhigh` reasoning effort.
 
 ```text
 $go-to-luna high sub n=3 -- Implement the approved migration plan and run the tests.
@@ -14,11 +16,13 @@ $go-to-luna high sub n=3 -- Implement the approved migration plan and run the te
 
 Go To Luna! is designed for users who want to preserve scarce main-model capacity without giving up main-model judgment. It supports invisible subagents and user-visible new tasks, then returns one reviewed result with a transparent usage receipt.
 
+`go-to-luna` is the canonical skill name and invocation identifier. “去月球! · Go To Luna!” is the marketing name.
+
 ## Highlights
 
 - **Main model stays in charge** — the selected conversation model owns planning, work breakdown, integration, and final review.
 - **Luna does the volume work** — every worker is pinned to `gpt-5.6-luna`; the skill never silently falls back to a more expensive model.
-- **Three effort levels** — route repeatable work to Luna with `low`, `medium`, or `high` reasoning.
+- **Four effort levels** — route work to Luna with `low`, `medium`, `high`, or `xhigh` reasoning.
 - **Two execution modes** — use lightweight subagents or visible, independently inspectable Codex tasks.
 - **Bounded parallelism** — choose `n=1..4`, or let `n=auto` match the number of genuinely independent work packages.
 - **Honest savings report** — see estimated main-model tokens offloaded and credit-weighted savings, without pretending that parallelism always reduces total raw tokens.
@@ -52,12 +56,12 @@ Restart Codex if the skill is not discovered immediately. You can also copy the 
 ## Usage
 
 ```text
-$go-to-luna [low|medium|high] [sub|task] [n=auto|1..4] [-- <task>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <task>]
 ```
 
 | Control | Values | Default | Meaning |
 | --- | --- | --- | --- |
-| Effort | `low`, `medium`, `high` | `medium` | Reasoning effort for every Luna worker |
+| Effort | `low`, `medium`, `high`, `xhigh` | `medium` | Reasoning effort for every Luna worker |
 | Mode | `sub`, `task` | `sub` | Hidden subagents or user-visible new tasks |
 | Workers | `n=auto`, `n=1..4` | `n=auto` | Automatically chosen or requested worker count |
 | Task | text after `--` | previous request | Explicit work to execute |
@@ -85,6 +89,14 @@ $go-to-luna high task n=3 -- Research the three proposed approaches and produce 
 ```
 
 New-task mode is explicit: child tasks appear in the sidebar and can be inspected independently. The invoking task remains the final reviewer and delivers the unified answer.
+
+### Use Extra High reasoning
+
+```text
+$go-to-luna xhigh sub n=2 -- Trace the intermittent concurrency failure and verify every edge case.
+```
+
+Use `xhigh` only for especially demanding reasoning. It is slower and consumes more Luna tokens than lower effort levels.
 
 ## Execution modes
 
@@ -169,7 +181,7 @@ Planning and final judgment benefit most from the model the user deliberately se
 
 Start with `n=auto`. More workers help only when the task contains independent work. An indivisible task should stay with one worker.
 
-### Are low, medium, and high applied to the coordinator?
+### Are low, medium, high, and xhigh applied to the coordinator?
 
 No. They apply to Luna workers only. The coordinator keeps the model and reasoning configuration already selected for the current task.
 

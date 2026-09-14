@@ -1,16 +1,18 @@
 ---
 name: go-to-luna
-description: Orchestrate the preceding or inline task with the current model as planner and final reviewer while GPT-5.6 Luna workers execute bounded work packages. Use when the user explicitly invokes Go To Luna! and selects low, medium, or high effort plus subagent or new-task mode.
+description: Orchestrate the preceding or inline task with the current model as planner and final reviewer while GPT-5.6 Luna workers execute bounded work packages. Use when the user explicitly invokes $go-to-luna and selects low, medium, high, or xhigh effort plus subagent or new-task mode.
 ---
 
-# 去月球! · Go To Luna!
+# go-to-luna
+
+**去月球! · Go To Luna!**
 
 Keep the current session model as coordinator. Delegate the execution-heavy work to `gpt-5.6-luna`, collect concise evidence, review the combined result, and finish with an honest usage estimate.
 
 ## Invocation contract
 
 ```text
-$go-to-luna [low|medium|high] [sub|task] [n=auto|1..4] [-- <task>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <task>]
 ```
 
 Arguments may appear in any order before `--`:

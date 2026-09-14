@@ -1,4 +1,6 @@
-# 去月球! · Go To Luna!
+# go-to-luna
+
+> **去月球! · Go To Luna!**
 
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](https://learn.chatgpt.com/docs/build-skills)
 [![执行模型](https://img.shields.io/badge/执行模型-GPT--5.6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
@@ -6,7 +8,7 @@
 
 [English](README.md) · 简体中文
 
-让当前 Codex 模型负责规划和终审，把大量执行工作交给一个或多个 GPT-5.6 Luna，并可选择 `low`、`medium` 或 `high` 推理强度。
+让当前 Codex 模型负责规划和终审，把大量执行工作交给一个或多个 GPT-5.6 Luna，并可选择 `low`、`medium`、`high` 或 `xhigh` 推理强度。
 
 ```text
 $go-to-luna high sub n=3 -- 执行已经确认的迁移方案，并完成测试。
@@ -14,11 +16,13 @@ $go-to-luna high sub n=3 -- 执行已经确认的迁移方案，并完成测试�
 
 去月球! 面向希望节省主模型稀缺额度、同时保留主模型判断质量的用户。它支持后台 Subagent 和用户可见的新任务两种模式，最后由当前任务统一审核、整合，并给出透明的用量回执。
 
+`go-to-luna` 是正式的 Skill 名称和调用标识；“去月球! · Go To Luna!”是营销名称。
+
 ## 亮点
 
 - **主模型掌舵**：当前对话所选模型负责规划、拆分、整合和最终审核。
 - **Luna 承担执行量**：所有执行者固定使用 `gpt-5.6-luna`，不会静默切换到更昂贵的模型。
-- **三档推理强度**：按任务难度选择 `low`、`medium` 或 `high`。
+- **四档推理强度**：按任务难度选择 `low`、`medium`、`high` 或 `xhigh`。
 - **两种执行模式**：可使用轻量后台 Subagent，也可创建用户可见、可独立查看的新任务。
 - **有界并行**：可指定 `n=1..4`，或用 `n=auto` 按真正独立的工作包自动分配。
 - **诚实估算节省**：报告转移了多少主模型工作量、预计节省多少加权额度，不把并行编排误写成总原始 token 必然下降。
@@ -52,12 +56,12 @@ git clone https://github.com/jerryyeungisjingyang/go-to-luna.git ~/.codex/skills
 ## 使用方法
 
 ```text
-$go-to-luna [low|medium|high] [sub|task] [n=auto|1..4] [-- <任务>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <任务>]
 ```
 
 | 参数 | 可选值 | 默认值 | 含义 |
 | --- | --- | --- | --- |
-| 推理强度 | `low`、`medium`、`high` | `medium` | 所有 Luna 执行者的推理强度 |
+| 推理强度 | `low`、`medium`、`high`、`xhigh` | `medium` | 所有 Luna 执行者的推理强度 |
 | 模式 | `sub`、`task` | `sub` | 后台 Subagent 或用户可见的新任务 |
 | 数量 | `n=auto`、`n=1..4` | `n=auto` | 自动选择或显式指定执行者数量 |
 | 任务 | `--` 后的文本 | 上一条请求 | 明确指定需要执行的工作 |
@@ -85,6 +89,14 @@ $go-to-luna high task n=3 -- 分别研究三个候选方案，最终给出审核
 ```
 
 新任务模式必须显式选择。子任务会出现在侧边栏中，可独立查看；发起调用的当前任务仍负责终审和统一交付。
+
+### 使用 Extra High 推理强度
+
+```text
+$go-to-luna xhigh sub n=2 -- 追踪偶发的并发故障，并验证所有边界情况。
+```
+
+`xhigh` 只用于推理要求特别高的任务；它比低档位更慢，也会消耗更多 Luna token。
 
 ## 两种执行模式
 
@@ -169,9 +181,9 @@ go-to-luna/
 
 建议从 `n=auto` 开始。只有任务能拆成独立工作时，更多执行者才有价值；不可拆分的任务应该只交给一个执行者。
 
-### low、medium、high 会修改当前模型吗？
+### low、medium、high、xhigh 会修改当前模型吗？
 
-不会。这三个档位只作用于 Luna 执行者，协调者继续使用当前任务已经选择的模型和推理配置。
+不会。这四个档位只作用于 Luna 执行者，协调者继续使用当前任务已经选择的模型和推理配置。
 
 ## 开发与测试
 
