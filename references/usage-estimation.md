@@ -31,7 +31,7 @@ When counts are available, run:
 
 ```bash
 python3 scripts/estimate_usage.py \
-  --main-model gpt-5.6-sol \
+  --main-model gpt-6.1-sol \
   --coordinator-input 3000 \
   --coordinator-output 1000 \
   --worker-input 24000 \
@@ -39,7 +39,7 @@ python3 scripts/estimate_usage.py \
   --source estimated
 ```
 
-The bundled rate card is dated `2026-09-12` and represents credits per million tokens. Treat it as a snapshot; if current official rates are available and differ, use current rates or describe only token offload.
+The bundled rate card is dated `2026-10-15`, covers the GPT-6 family (Astra, 6.1 Sol, 6 Sol, 6 Luna) alongside the GPT-5.6 series, and represents credits per million tokens. Treat it as a snapshot; if current official rates are available and differ, use current rates or describe only token offload.
 
 ## Required wording
 

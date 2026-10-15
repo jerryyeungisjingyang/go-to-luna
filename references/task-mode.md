@@ -1,12 +1,12 @@
 # New-task mode
 
-Use this mode only when the user explicitly selected `task`, `thread`, or `新对话` and the Codex app exposes task-creation and task-reading tools. New tasks are user-visible and must use `gpt-5.6-luna`.
+Use this mode only when the user explicitly selected `task`, `thread`, or `新对话` and the Codex app exposes task-creation and task-reading tools. New tasks are user-visible and must use the selected Luna model (`gpt-6-luna` by default).
 
 ## Create tasks
 
 Resolve the current project before creation. Keep every prompt self-contained and minimal.
 
-- Set the new task model to `gpt-5.6-luna`.
+- Set the new task model to the selected worker model: `gpt-6-luna` by default, or `gpt-5.6-luna` when the user passed `model=luna5.6`.
 - Set its reasoning effort to the parsed `low`, `medium`, `high`, or `xhigh` value.
 - Prefix titles with `Luna i/n` followed by a short assignment name.
 - Use the same saved project for repository work and a projectless task only when no repository context is needed.

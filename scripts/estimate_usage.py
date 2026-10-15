@@ -8,9 +8,12 @@ import json
 from typing import Any
 
 
-RATE_CARD_DATE = "2026-09-12"
+RATE_CARD_DATE = "2026-10-15"
 RATES = {
+    "gpt-6.1-sol": (50.0, 250.0),
     "gpt-6-astra": (250.0, 1250.0),
+    "gpt-6-sol": (50.0, 250.0),
+    "gpt-6-luna": (2.5, 12.5),
     "gpt-5.6-sol": (100.0, 500.0),
     "gpt-5.6-terra": (50.0, 300.0),
     "gpt-5.6-luna": (5.0, 30.0),
@@ -18,10 +21,16 @@ RATES = {
 }
 ALIASES = {
     "astra": "gpt-6-astra",
+    "gpt-6.1": "gpt-6.1-sol",
+    "sol6.1": "gpt-6.1-sol",
+    "gpt-6": "gpt-6-sol",
+    "sol6": "gpt-6-sol",
+    "luna": "gpt-6-luna",
+    "luna6": "gpt-6-luna",
+    "luna5.6": "gpt-5.6-luna",
     "gpt-5.6": "gpt-5.6-sol",
     "sol": "gpt-5.6-sol",
     "terra": "gpt-5.6-terra",
-    "luna": "gpt-5.6-luna",
 }
 
 
@@ -40,14 +49,16 @@ def calculate(
     worker_input: int,
     worker_output: int,
     source: str = "estimated",
+    worker_model: str = "gpt-6-luna",
 ) -> dict[str, Any]:
     counts = (coordinator_input, coordinator_output, worker_input, worker_output)
     if any(value < 0 for value in counts):
         raise ValueError("token counts must be non-negative")
 
     normalized_model = normalize_model(main_model)
+    normalized_worker_model = normalize_model(worker_model)
     main_input_rate, main_output_rate = RATES[normalized_model]
-    luna_input_rate, luna_output_rate = RATES["gpt-5.6-luna"]
+    worker_input_rate, worker_output_rate = RATES[normalized_worker_model]
 
     coordinator_tokens = coordinator_input + coordinator_output
     worker_tokens = worker_input + worker_output
@@ -60,8 +71,8 @@ def calculate(
     actual_credits = (
         coordinator_input * main_input_rate
         + coordinator_output * main_output_rate
-        + worker_input * luna_input_rate
-        + worker_output * luna_output_rate
+        + worker_input * worker_input_rate
+        + worker_output * worker_output_rate
     ) / 1_000_000
     saved_credits = max(0.0, baseline_credits - actual_credits)
 
@@ -69,7 +80,7 @@ def calculate(
         "source": source,
         "rate_card_date": RATE_CARD_DATE,
         "main_model": normalized_model,
-        "worker_model": "gpt-5.6-luna",
+        "worker_model": normalized_worker_model,
         "coordinator_tokens": coordinator_tokens,
         "worker_tokens": worker_tokens,
         "estimated_main_model_tokens_offloaded": worker_tokens,
@@ -108,6 +119,7 @@ def main() -> None:
     parser.add_argument("--coordinator-output", type=non_negative_int, required=True)
     parser.add_argument("--worker-input", type=non_negative_int, required=True)
     parser.add_argument("--worker-output", type=non_negative_int, required=True)
+    parser.add_argument("--worker-model", default="gpt-6-luna")
     parser.add_argument("--source", choices=("actual", "estimated"), default="estimated")
     args = parser.parse_args()
 
@@ -118,6 +130,7 @@ def main() -> None:
         worker_input=args.worker_input,
         worker_output=args.worker_output,
         source=args.source,
+        worker_model=args.worker_model,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

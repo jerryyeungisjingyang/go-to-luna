@@ -1,18 +1,18 @@
 ---
 name: go-to-luna
-description: Orchestrate the preceding or inline task with the current model as planner and final reviewer while GPT-5.6 Luna workers execute bounded work packages. Use when the user explicitly invokes $go-to-luna and selects low, medium, high, or xhigh effort plus subagent or new-task mode.
+description: Orchestrate the preceding or inline task with the current model as planner and final reviewer while GPT-6 Luna workers execute bounded work packages. Use when the user explicitly invokes $go-to-luna and selects low, medium, high, or xhigh effort plus subagent or new-task mode.
 ---
 
 # go-to-luna
 
 **去月球! · Go To Luna!**
 
-Keep the current session model as coordinator. Delegate the execution-heavy work to `gpt-5.6-luna`, collect concise evidence, review the combined result, and finish with an honest usage estimate.
+Keep the current session model as coordinator. Delegate the execution-heavy work to `gpt-6-luna` (or `gpt-5.6-luna` when explicitly requested), collect concise evidence, review the combined result, and finish with an honest usage estimate.
 
 ## Invocation contract
 
 ```text
-$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <task>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [model=luna6|luna5.6] [-- <task>]
 ```
 
 Arguments may appear in any order before `--`:
@@ -21,9 +21,10 @@ Arguments may appear in any order before `--`:
 - `sub`, `subagent`, or `子代理` selects subagent mode. This is the default.
 - `task`, `thread`, or `新对话` selects user-visible new-task mode.
 - `n=auto` lets the coordinator select the worker count. An integer from 1 through 4 requests that exact number of workers.
+- `model=luna6` selects `gpt-6-luna` workers. This is the default. `model=luna5.6` explicitly selects `gpt-5.6-luna`, which remains available during the GPT-6 rollout.
 - Text after `--` is the task. Without `--`, treat unparsed ordinary language as an inline task only when it is unambiguous.
 
-Reject multiple effort levels, multiple modes, invalid worker counts, and unknown flags with one concise correction. Do not silently reinterpret invalid controls as task text.
+Reject multiple effort levels, multiple modes, invalid worker counts, unknown worker models, and unknown flags with one concise correction. Do not silently reinterpret invalid controls as task text.
 
 ## Resolve the task
 
@@ -66,7 +67,7 @@ Prefer disjoint ownership. For shared files or external systems, appoint one wri
 
 ## Dispatch Luna workers
 
-Use `gpt-5.6-luna` for every worker and pass the selected reasoning effort explicitly. Do not silently fall back to the coordinator model, Astra, Sol, Terra, or another higher-cost model. If Luna or the requested orchestration mode is unavailable, report the missing capability and stop before doing the delegated work with an expensive fallback.
+Use the selected Luna model for every worker — `gpt-6-luna` by default, `gpt-5.6-luna` only when the user passed `model=luna5.6` — and pass the selected reasoning effort explicitly. Do not silently fall back to the coordinator model, Astra, Sol, Terra, or another higher-cost model. If the selected Luna model or the requested orchestration mode is unavailable, report the missing capability and stop before doing the delegated work with an expensive fallback.
 
 - For `sub`, read and follow [references/subagent-mode.md](references/subagent-mode.md).
 - For `task`, read and follow [references/task-mode.md](references/task-mode.md).

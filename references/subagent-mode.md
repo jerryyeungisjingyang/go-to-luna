@@ -6,7 +6,7 @@ Use this mode when the current Codex environment exposes native subagent orchest
 
 For every worker:
 
-- Set `model` to `gpt-5.6-luna`.
+- Set `model` to the selected worker model: `gpt-6-luna` by default, or `gpt-5.6-luna` when the user passed `model=luna5.6`.
 - Set `reasoning_effort` to the parsed `low`, `medium`, `high`, or `xhigh` value.
 - With `collaboration.spawn_agent`, set `fork_turns` to `none`; send the self-contained work package instead of the full conversation.
 - Give the worker a unique, bounded assignment and the exact required return format.
