@@ -3,12 +3,12 @@
 > **去月球! · Go To Luna!**
 
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](https://learn.chatgpt.com/docs/build-skills)
-[![Worker model](https://img.shields.io/badge/workers-GPT--5.6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+[![Worker model](https://img.shields.io/badge/workers-GPT--6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22C55E.svg)](LICENSE)
 
 English · [简体中文](README.zh-CN.md)
 
-Use your current Codex model to plan and review. Send the execution-heavy work to one or more GPT-5.6 Luna workers at `low`, `medium`, `high`, or `xhigh` reasoning effort.
+Use your current Codex model to plan and review. Send the execution-heavy work to one or more GPT-6 Luna workers at `low`, `medium`, `high`, or `xhigh` reasoning effort.
 
 ```text
 $go-to-luna high sub n=3 -- Implement the approved migration plan and run the tests.
@@ -21,7 +21,7 @@ Go To Luna! is designed for users who want to preserve scarce main-model capacit
 ## Highlights
 
 - **Main model stays in charge** — the selected conversation model owns planning, work breakdown, integration, and final review.
-- **Luna does the volume work** — every worker is pinned to `gpt-5.6-luna`; the skill never silently falls back to a more expensive model.
+- **Luna does the volume work** — every worker defaults to `gpt-6-luna` (with an explicit `gpt-5.6-luna` opt-in); the skill never silently falls back to a more expensive model.
 - **Four effort levels** — route work to Luna with `low`, `medium`, `high`, or `xhigh` reasoning.
 - **Two execution modes** — use lightweight subagents or visible, independently inspectable Codex tasks.
 - **Bounded parallelism** — choose `n=1..4`, or let `n=auto` match the number of genuinely independent work packages.
@@ -56,7 +56,7 @@ Restart Codex if the skill is not discovered immediately. You can also copy the 
 ## Usage
 
 ```text
-$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <task>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [model=luna6|luna5.6] [-- <task>]
 ```
 
 | Control | Values | Default | Meaning |
@@ -64,6 +64,7 @@ $go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <task>]
 | Effort | `low`, `medium`, `high`, `xhigh` | `medium` | Reasoning effort for every Luna worker |
 | Mode | `sub`, `task` | `sub` | Hidden subagents or user-visible new tasks |
 | Workers | `n=auto`, `n=1..4` | `n=auto` | Automatically chosen or requested worker count |
+| Worker model | `model=luna6`, `model=luna5.6` | `model=luna6` | `gpt-6-luna` or the previous-generation `gpt-5.6-luna` |
 | Task | text after `--` | previous request | Explicit work to execute |
 
 Codex skills use the portable `$skill-name` invocation shown above. A `/go-to-luna` command works only in clients that explicitly map slash commands to skills.
@@ -114,14 +115,14 @@ Every run ends with a receipt like this:
 ```text
 Go To Luna!: Luna high × 3 · Subagent
 Main-model work offloaded: ~32,000 tokens (88.89%)
-Estimated weighted-usage saving: ~83.89%
+Estimated weighted-usage saving: ~84.44%
 Total raw-token saving: not claimed
 Basis: estimated coordinator 3k input + 1k output; workers 24k input + 8k output
 Verification: focused tests passed
 Remaining risks: none
 ```
 
-In this illustrative GPT-5.6 Sol example, the same 36,000 routed tokens would cost about `7.20` weighted credits if all work ran on Sol. Keeping 4,000 coordinator tokens on Sol and routing 32,000 worker tokens to Luna costs about `1.16`, an estimated reduction of `83.89%` under the bundled rate card.
+In this illustrative GPT-6.1 Sol example, the same 36,000 routed tokens would cost about `3.60` weighted credits if all work ran on Sol. Keeping 4,000 coordinator tokens on Sol and routing 32,000 worker tokens to Luna costs about `0.56`, an estimated reduction of `84.44%` under the bundled rate card.
 
 This is an estimate of **main-model workload and weighted usage**, not a promise that the ChatGPT Plus meter will fall by the same percentage. Parallel workers may increase total raw tokens because they need instructions, context, and review.
 
@@ -129,7 +130,7 @@ Calculate a receipt from measured or estimated counts:
 
 ```bash
 python3 scripts/estimate_usage.py \
-  --main-model sol \
+  --main-model gpt-6.1-sol \
   --coordinator-input 3000 \
   --coordinator-output 1000 \
   --worker-input 24000 \
@@ -163,7 +164,7 @@ go-to-luna/
 ## Requirements
 
 - Codex with skills support
-- Access to GPT-5.6 Luna
+- Access to GPT-6 Luna (GPT-5.6 Luna remains selectable during the rollout)
 - Subagent tools for `sub` mode or task-management tools for `task` mode
 - Python 3.9+ only when using the optional usage calculator
 

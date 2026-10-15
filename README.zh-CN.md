@@ -3,12 +3,12 @@
 > **去月球! · Go To Luna!**
 
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](https://learn.chatgpt.com/docs/build-skills)
-[![执行模型](https://img.shields.io/badge/执行模型-GPT--5.6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+[![执行模型](https://img.shields.io/badge/执行模型-GPT--6%20Luna-6D5EF5)](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 [![许可证: MIT](https://img.shields.io/badge/许可证-MIT-22C55E.svg)](LICENSE)
 
 [English](README.md) · 简体中文
 
-让当前 Codex 模型负责规划和终审，把大量执行工作交给一个或多个 GPT-5.6 Luna，并可选择 `low`、`medium`、`high` 或 `xhigh` 推理强度。
+让当前 Codex 模型负责规划和终审，把大量执行工作交给一个或多个 GPT-6 Luna，并可选择 `low`、`medium`、`high` 或 `xhigh` 推理强度。
 
 ```text
 $go-to-luna high sub n=3 -- 执行已经确认的迁移方案，并完成测试。
@@ -21,7 +21,7 @@ $go-to-luna high sub n=3 -- 执行已经确认的迁移方案，并完成测试�
 ## 亮点
 
 - **主模型掌舵**：当前对话所选模型负责规划、拆分、整合和最终审核。
-- **Luna 承担执行量**：所有执行者固定使用 `gpt-5.6-luna`，不会静默切换到更昂贵的模型。
+- **Luna 承担执行量**：所有执行者默认使用 `gpt-6-luna`（可显式选择 `gpt-5.6-luna`），不会静默切换到更昂贵的模型。
 - **四档推理强度**：按任务难度选择 `low`、`medium`、`high` 或 `xhigh`。
 - **两种执行模式**：可使用轻量后台 Subagent，也可创建用户可见、可独立查看的新任务。
 - **有界并行**：可指定 `n=1..4`，或用 `n=auto` 按真正独立的工作包自动分配。
@@ -56,7 +56,7 @@ git clone https://github.com/jerryyeungisjingyang/go-to-luna.git ~/.codex/skills
 ## 使用方法
 
 ```text
-$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <任务>]
+$go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [model=luna6|luna5.6] [-- <任务>]
 ```
 
 | 参数 | 可选值 | 默认值 | 含义 |
@@ -64,6 +64,7 @@ $go-to-luna [low|medium|high|xhigh] [sub|task] [n=auto|1..4] [-- <任务>]
 | 推理强度 | `low`、`medium`、`high`、`xhigh` | `medium` | 所有 Luna 执行者的推理强度 |
 | 模式 | `sub`、`task` | `sub` | 后台 Subagent 或用户可见的新任务 |
 | 数量 | `n=auto`、`n=1..4` | `n=auto` | 自动选择或显式指定执行者数量 |
+| 执行模型 | `model=luna6`、`model=luna5.6` | `model=luna6` | `gpt-6-luna` 或上一代的 `gpt-5.6-luna` |
 | 任务 | `--` 后的文本 | 上一条请求 | 明确指定需要执行的工作 |
 
 Codex Skill 的可移植调用格式是 `$skill-name`。只有客户端明确把斜杠命令映射到 Skill 时，`/go-to-luna` 才能生效。
@@ -114,14 +115,14 @@ $go-to-luna xhigh sub n=2 -- 追踪偶发的并发故障，并验证所有边界
 ```text
 去月球!: Luna high × 3 · Subagent
 主模型转移工作量: ~32,000 tokens（88.89%）
-预计加权额度节省: ~83.89%
+预计加权额度节省: ~84.44%
 总原始 token 节省: 不作承诺
 估算依据: 协调者 3k 输入 + 1k 输出；执行者 24k 输入 + 8k 输出
 验证: 针对性测试通过
 剩余风险: 无
 ```
 
-以上述 GPT-5.6 Sol 示例计算：如果 36,000 个路由 token 全部由 Sol 完成，约需 `7.20` 加权 credits；保留 4,000 个协调 token 给 Sol、把 32,000 个执行 token 交给 Luna，约需 `1.16`，按内置费率表估算降低 `83.89%`。
+以上述 GPT-6.1 Sol 示例计算：如果 36,000 个路由 token 全部由 Sol 完成，约需 `3.60` 加权 credits；保留 4,000 个协调 token 给 Sol、把 32,000 个执行 token 交给 Luna，约需 `0.56`，按内置费率表估算降低 `84.44%`。
 
 这是对**主模型工作量和加权用量**的估算，不代表 ChatGPT Plus 用量计数器一定按相同比例下降。并行执行需要重复传递指令、上下文并进行复核，因此总原始 token 可能持平或增加。
 
@@ -129,7 +130,7 @@ $go-to-luna xhigh sub n=2 -- 追踪偶发的并发故障，并验证所有边界
 
 ```bash
 python3 scripts/estimate_usage.py \
-  --main-model sol \
+  --main-model gpt-6.1-sol \
   --coordinator-input 3000 \
   --coordinator-output 1000 \
   --worker-input 24000 \
@@ -163,7 +164,7 @@ go-to-luna/
 ## 环境要求
 
 - 支持 Skills 的 Codex
-- 可用的 GPT-5.6 Luna 模型
+- 可用的 GPT-6 Luna 模型（过渡期内也可选择 GPT-5.6 Luna）
 - `sub` 模式需要 Subagent 工具，`task` 模式需要任务管理工具
 - 仅在使用可选用量计算器时需要 Python 3.9+
 
